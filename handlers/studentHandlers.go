@@ -15,7 +15,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// CreateStudent handles the route for creating a new student
+
 func CreateStudent(w http.ResponseWriter, r *http.Request) {
 	var student models.Student
 	if err := json.NewDecoder(r.Body).Decode(&student); err != nil {
@@ -39,18 +39,18 @@ func CreateStudent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Add the student to the database (repo layer)
+	
 	createdStudent, err := repo.CreateStudent(student)
 	if err != nil {
 		utils.SendErrorResponse(w, "Failed to create student", http.StatusInternalServerError)
 		return
 	}
 
-	// Respond with the created student details
+	
 	utils.SendSuccessResponse(w, "Student created successfully", createdStudent)
 }
 
-// GetAllStudents handles the route to fetch all students
+
 func GetAllStudents(w http.ResponseWriter, r *http.Request) {
 	students, err := repo.GetAllStudents()
 	if err != nil {
@@ -61,7 +61,6 @@ func GetAllStudents(w http.ResponseWriter, r *http.Request) {
 	utils.SendSuccessResponse(w, "Students fetched successfully", students)
 }
 
-// GetStudentByID handles fetching a single student by ID
 func GetStudentByID(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(mux.Vars(r)["id"])
 	student, err := repo.GetStudentByID(id)
@@ -73,7 +72,7 @@ func GetStudentByID(w http.ResponseWriter, r *http.Request) {
 	utils.SendSuccessResponse(w, "Student fetched successfully", student)
 }
 
-// UpdateStudentByID handles updating a student by ID
+
 func UpdateStudentByID(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(mux.Vars(r)["id"])
 	var student models.Student
@@ -82,7 +81,7 @@ func UpdateStudentByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Validate name and age
+	
 	if student.Name == "" {
 		utils.SendErrorResponse(w, "Name cannot be empty", http.StatusBadRequest)
 		return
@@ -98,7 +97,7 @@ func UpdateStudentByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Update student in the repo
+	
 	updatedStudent, err := repo.UpdateStudentByID(id, student)
 	if err != nil {
 		utils.SendErrorResponse(w, "Failed to update student", http.StatusInternalServerError)
@@ -108,7 +107,6 @@ func UpdateStudentByID(w http.ResponseWriter, r *http.Request) {
 	utils.SendSuccessResponse(w, "Student updated successfully", updatedStudent)
 }
 
-// DeleteStudentByID handles deleting a student by ID
 func DeleteStudentByID(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(mux.Vars(r)["id"])
 
@@ -120,7 +118,7 @@ func DeleteStudentByID(w http.ResponseWriter, r *http.Request) {
 	utils.SendSuccessResponse(w, "Student deleted successfully", nil)
 }
 
-// GenerateStudentSummary handles the route for generating a student summary using Ollama
+
 func GenerateStudentSummary(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(mux.Vars(r)["id"])
 	student, err := repo.GetStudentByID(id)
@@ -130,10 +128,9 @@ func GenerateStudentSummary(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Create a summary prompt based on student information
+
 	prompt := fmt.Sprintf("Summarize this student in a few words as a sentence : Name: %s, Age: %d, Email: %s", student.Name, student.Age, student.Email)
 
-	// Call Ollama API for summary
 	summary, err := services.GetStudentSummaryFromOllama(prompt)
 	log.Print(err)
 	if err != nil {
@@ -144,10 +141,9 @@ func GenerateStudentSummary(w http.ResponseWriter, r *http.Request) {
 	utils.SendSuccessResponse(w, "Summary generated successfully", summary)
 }
 
-// Helper function to validate email format using regex
+
 func isValidEmail(email string) bool {
-	// Basic regex for validating email format
-	// Improved email validation to handle more cases
+	
 	regex := `^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$`
 	matched, _ := regexp.MatchString(regex, email)
 	return matched

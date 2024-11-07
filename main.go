@@ -10,7 +10,6 @@ import (
 func main() {
 	r := mux.NewRouter()
 
-	// Define the routes
 	r.HandleFunc("/students", handlers.CreateStudent).Methods("POST")
 	r.HandleFunc("/students", handlers.GetAllStudents).Methods("GET")
 	r.HandleFunc("/students/{id:[0-9]+}", handlers.GetStudentByID).Methods("GET")
@@ -18,6 +17,6 @@ func main() {
 	r.HandleFunc("/students/{id:[0-9]+}", handlers.DeleteStudentByID).Methods("DELETE")
 	r.HandleFunc("/students/{id:[0-9]+}/summary", handlers.GenerateStudentSummary).Methods("GET")
 
-	// Start the server
+	
 	log.Fatal(http.ListenAndServe(":8080", r))
 }

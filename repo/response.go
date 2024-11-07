@@ -12,7 +12,7 @@ var mu sync.Mutex
 
 
 func init() {
-	// Initialize with default values
+	
 	students = []models.Student{
 		{ID: 1, Name: "Alice", Age: 20, Email: "alice@example.com"},
 		{ID: 2, Name: "Bob", Age: 22, Email: "bob@example.com"},
@@ -20,7 +20,7 @@ func init() {
 	idCounter = 3
 }
 
-// CreateStudent adds a new student to the repository
+
 func CreateStudent(student models.Student) (models.Student, error) {
 	mu.Lock()
 	defer mu.Unlock()
@@ -32,7 +32,7 @@ func CreateStudent(student models.Student) (models.Student, error) {
 	return student, nil
 }
 
-// GetAllStudents retrieves all students from the repository
+
 func GetAllStudents() ([]models.Student, error) {
 	mu.Lock()
 	defer mu.Unlock()
@@ -40,7 +40,7 @@ func GetAllStudents() ([]models.Student, error) {
 	return students, nil
 }
 
-// GetStudentByID retrieves a student by ID
+
 func GetStudentByID(id int) (models.Student, error) {
 	mu.Lock()
 	defer mu.Unlock()
@@ -53,7 +53,7 @@ func GetStudentByID(id int) (models.Student, error) {
 	return models.Student{}, errors.New("student not found")
 }
 
-// UpdateStudentByID updates a student by ID
+
 func UpdateStudentByID(id int, updatedStudent models.Student) (models.Student, error) {
 	mu.Lock()
 	defer mu.Unlock()
@@ -68,7 +68,7 @@ func UpdateStudentByID(id int, updatedStudent models.Student) (models.Student, e
 	return models.Student{}, errors.New("student not found")
 }
 
-// DeleteStudentByID deletes a student by ID
+
 func DeleteStudentByID(id int) error {
 	mu.Lock()
 	defer mu.Unlock()
